@@ -61,7 +61,17 @@ public class CobrowseIOModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void stop() {
-    CobrowseIO.instance().stop();
+    final Activity activity = getReactApplicationContext().getCurrentActivity();
+    if (activity != null) {
+    activity.runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        CobrowseIO.instance().stop();
+      }
+    });
+    } else {
+      Log.w("CobrowseIO", "Activity was null during stop() call.");
+    }
   }
 
   @ReactMethod
